@@ -15,6 +15,7 @@ You can Install all this by doing the below steps one by one. and these steps ar
 # Steps:-
 
 # For Docker Installation
+
 sudo apt-get update
 sudo apt-get install docker.io -y
 sudo usermod -aG docker $USER && newgrp docker
