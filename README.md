@@ -12,12 +12,12 @@ Before we begin with the Project, we need to make sure we have the following pre
 
 You can Install all this by doing the below steps one by one. and these steps are for Ubuntu AMI.
 
-# Steps:-
-
 # For Docker Installation
 
 sudo apt-get update
+
 sudo apt-get install docker.io -y
+
 sudo usermod -aG docker $USER && newgrp docker
 
 # For Minikube & Kubectl
