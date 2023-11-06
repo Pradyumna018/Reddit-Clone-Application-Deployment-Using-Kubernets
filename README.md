@@ -31,13 +31,15 @@ sudo snap install kubectl --classic
 minikube start --driver=docker
 
 
-Great! You're all set for the project. Your Minikube cluster is now prepared for deploying the Reddit clone application. 
+# Great! You're all set for the project. Your Minikube cluster is now prepared for deploying the Reddit clone application. 
 
 
-Step 1: Clone the source code
-The first step is to clone the source code for the app. You can do this by using this command git clone https://github.com/LondheShubham153/reddit-clone-k8s-ingress.git 
+# Step 1: Clone the source code
 
-Step 2: Containerize the Application using Docker
+The first step is to clone the source code for the app. You can do this by using this command git clone https://github.com/Pradyumna018/Node-Application-Deployment-Using-Kubernets.git
+
+# Step 2: Containerize the Application using Docker
+
 Write a Dockerfile with the following code:
 
 
