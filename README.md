@@ -13,36 +13,40 @@ Before we begin with the Project, we need to make sure we have the following pre
 You can Install all this by doing the below steps one by one. and these steps are for Ubuntu AMI.
 
 # For Docker Installation
-
+```
 sudo apt-get update
 
 sudo apt-get install docker.io -y
-
+```
+```
 sudo usermod -aG docker $USER && newgrp docker
-
+```
 # For Minikube & Kubectl
-
+```
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 
 sudo install minikube-linux-amd64 /usr/local/bin/minikube 
-
+```
+```
 sudo snap install kubectl --classic
 
 minikube start --driver=docker
+```
 
-
-# Great! You're all set for the project. Your Minikube cluster is now prepared for deploying the Reddit clone application. 
+### Great! You're all set for the project. Your Minikube cluster is now prepared for deploying the Reddit clone application. 
 
 
 # Step 1: Clone the source code
 
-The first step is to clone the source code for the app. You can do this by using this command git clone https://github.com/Pradyumna018/Node-Application-Deployment-Using-Kubernets.git
-
+The first step is to clone the source code for the app. You can do this by using this command :
+```
+git clone https://github.com/Pradyumna018/Node-Application-Deployment-Using-Kubernets.git
+```
 # Step 2: Containerize the Application using Docker
 
 Write a Dockerfile with the following code:
 
-
+```
 FROM node:19-alpine3.15
 
 WORKDIR /reddit-clone
@@ -55,20 +59,26 @@ EXPOSE 3000
 
 CMD ["npm","run","dev"]
 
-Step 3) Building Docker-Image
-Now it's time to build Docker Image from this Dockerfile. docker build -t <DockerHub_Username>/<Imagename> . use this command to build a docker image
+```
+# Step 3) Building Docker-Image
 
-Step 4) Push the Image To DockerHub
+Now it's time to build Docker Image from this Dockerfile. 
+
+``docker build -t <DockerHub_Username>/<Imagename>``   use this command to build a docker image
+
+# Step 4) Push the Image To DockerHub
+
 Now push this Docker Image to DockerHub so our Deployment file can pull this image & run the app in Kubernetes pods.
 
-First login to your DockerHub account using Command i.e docker login and give your username & password.
+First login to your DockerHub account using Command i.e __docker login and give your username & password.__
 
-Then use docker push <DockerHub_Username>/<Imagename> for pushing to the DockerHub.
+Then use **docker push <DockerHub_Username>/<Imagename>** for pushing to the DockerHub.
 
-You can use an existing docker image i.e trainwithshubham/reddit-clone for deployment.
+You can use an existing docker image i.e pradyumnam/reddit-clone for deployment.
 
 
-Step 5) Write a Kubernetes Manifest File
+# Step 5) Write a Kubernetes Manifest File
+
 Now, You might be wondering what this manifest file in Kubernetes is. Don't worry, I'll tell you in brief.
 
 When you are going to deploy to Kubernetes or create Kubernetes resources like a pod, replica-set, config map, secret, deployment, etc, you need to write a file called manifest that describes that object and its attributes either in yaml or json. Just like you do in the ansible playbook.
@@ -76,9 +86,11 @@ When you are going to deploy to Kubernetes or create Kubernetes resources like a
 Of course, you can create those objects by using just the command line, but the recommended way is to write a file so that you can version control it and use it in a repeatable way.
 
 
-Write Deployment.yml file
+# Write Deployment.yml file
+
 Let's Create a Deployment File For our Application. Use the following code for the Deployment.yml file.
 
+```
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -97,12 +109,14 @@ spec:
     spec:
       containers:
       - name: reddit-clone
-        image: trainwithshubham/reddit-clone
+        image: pradyumnam/reddit-clone
         ports:
         - containerPort: 3000
+```
 
-Write Service.yml file
+# Write Service.yml file
 
+```
 apiVersion: v1
 kind: Service
 metadata:
@@ -117,19 +131,25 @@ spec:
     nodePort: 31000
   selector:
     app: reddit-clone
+```
+
+# Step 6) Deploy the app to Kubernetes & Create a Service For It
+
+Now, we have a deployment file for our app and we have a running Kubernetes cluster, we can deploy the app to Kubernetes. 
+
+To deploy the app you need to run following the command: ``kubectl apply -f Deployment.yml``
+
+Just Like this create a Service using : ``kubectl apply -f Service.yml``
+
+If You want to check your deployment & Service use the command : __kubectl get deployment__ & __kubectl get services__
 
 
-Step 5) Deploy the app to Kubernetes & Create a Service For It
-Now, we have a deployment file for our app and we have a running Kubernetes cluster, we can deploy the app to Kubernetes. To deploy the app you need to run following the command: kubectl apply -f Deployment.yml Just Like this create a Service using kubectl apply -f Service.yml
+# Step 7) Expose the app
 
-If You want to check your deployment & Service use the command kubectl get deployment & kubectl get services
+First We need to expose our deployment so use command :  ``kubectl expose deployment reddit-clone-deployment --type=NodePort``
 
+You can test your deployment using __curl -L http://192.168.49.2:31000. 192.168.49.2__ is a minikube ip & Port 31000 is defined in Service.yml
 
-Step 8) Expose the app
-First We need to expose our deployment so use kubectl expose deployment reddit-clone-deployment --type=NodePort command.
-
-You can test your deployment using curl -L http://192.168.49.2:31000. 192.168.49.2 is a minikube ip & Port 31000 is defined in Service.yml
-
-Then We have to expose our app service kubectl port-forward svc/reddit-clone-service 3000:3000 --address 0.0.0.0 &
+Then We have to expose our app service : ``kubectl port-forward svc/reddit-clone-service 3000:3000 --address 0.0.0.0 &``
 
 
