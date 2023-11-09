@@ -1,4 +1,4 @@
-# Node-Application-Deployment-Using-Kubernets
+# Node-Application-Deployment-Using-Kubernets (Reddit Clone)
 
 Before we begin with the Project, we need to make sure we have the following prerequisites installed:
 
@@ -204,6 +204,12 @@ Now It's time to test your ingress so use the __curl -L domain/test__ command in
 
 
 ![fg](https://github.com/Pradyumna018/Reddit-Clone-Application-Deployment-Using-Kubernets/assets/136186419/95dbd28d-2db4-4711-9173-6365c531064d)
+
+
+
+Note:- Make sure you open the 3000 port in a security group of your Ec2 Instance.
+
+
 
 
 
