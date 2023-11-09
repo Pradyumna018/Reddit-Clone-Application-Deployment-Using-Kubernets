@@ -40,7 +40,7 @@ minikube start --driver=docker
 
 The first step is to clone the source code for the app. You can do this by using this command :
 ```
-git clone https://github.com/Pradyumna018/Node-Application-Deployment-Using-Kubernets.git
+git clone https://github.com/Pradyumna018/Reddit-Clone-Application-Deployment-Using-Kubernets.git
 ```
 # Step 2: Containerize the Application using Docker
 
