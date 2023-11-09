@@ -148,8 +148,64 @@ If You want to check your deployment & Service use the command : __kubectl get d
 
 First We need to expose our deployment so use command :  ``kubectl expose deployment reddit-clone-deployment --type=NodePort``
 
-You can test your deployment using __curl -L http://192.168.49.2:31000. 192.168.49.2__ is a minikube ip & Port 31000 is defined in Service.yml
+You can test your deployment using __curl -L http://192.168.49.2:31000. 
+
+192.168.49.2__ is a minikube ip & Port 31000 is defined in Service.yml
 
 Then We have to expose our app service : ``kubectl port-forward svc/reddit-clone-service 3000:3000 --address 0.0.0.0 &``
+
+
+# Step 8) Let's Configure Ingress
+
+Let's write ingress.yml and put the following code in it:
+
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-reddit-app
+spec:
+  rules:
+  - host: "domain.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/test"
+        backend:
+          service:
+            name: reddit-clone-service
+            port:
+              number: 3000
+  - host: "*.domain.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/test"
+        backend:
+          service:
+            name: reddit-clone-service
+            port:
+              number: 3000
+```
+
+Minikube doesn't enable ingress by default; we have to enable it first using ```minikube addons enable ingress``` command.
+
+If you want to check the current setting for addons in minikube use ```minikube addons list``` command.
+
+Now you can able to create ingress for your service. ```kubectl apply -f ingress.yml``` use this command to apply ingress settings.
+
+Verify that the ingress resource is running correctly by using ```kubectl get ingress ingress-reddit-app``` command.
+
+# Test Ingress
+
+Now It's time to test your ingress so use the __curl -L domain/test__ command in the terminal.
+
+# OUTPUT 
+
+
+![fg](https://github.com/Pradyumna018/Reddit-Clone-Application-Deployment-Using-Kubernets/assets/136186419/95dbd28d-2db4-4711-9173-6365c531064d)
+
+
+
 
 
